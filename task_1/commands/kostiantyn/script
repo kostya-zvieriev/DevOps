@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+#/ command: zvieriev:kostiantyn: "displays a list of all defined variables in color"
+#/ usage: rerun zvieriev:kostiantyn [options]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: 
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "kostiantyn" || { 
+  echo >&2 "Failed loading function library." ; exit 1 ; 
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+awk -F'=' '{ if (length($2) != 0)
+  print "\033[31m" $1 "\033[0m="  "\033[32m" $2 "\033[0m"
+}' <<< "$(env)"
+
+# - - -
+# Put the command implementation here.
+# - - -
+
+# Done. Exit with last command exit status.
+exit $?
+
